@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+        const socket = io('http://192.168.0.7:3000');
+        // socket.send('hello')
+        // socket.on('hello', function(data) {
+        //         addMessage(data.message);
+
+        //         // Respond with a message including this clients' id sent from the server
+        //         socket.emit('i am client', {data: 'foo!', id: data.id});
+        //     });
+        // socket.on('time', function(data) {
+        //     addMessage(data);
+        // });
+        // socket.emit('join', {email: ''});
+
+            socket.on('qr_code', (data) => {
+                console.log('message: ', data)
+                socket.emit('qr_code','my msg');
+
+            });
+
+            socket.on('error', console.error.bind(console));
+            socket.on('messagedetection', console.log.bind(console));
+            // socket.on('qr_code', console.log.bind(console));
+
+
+            // function addMessage(message) {
+            //     var text = document.createTextNode(message),
+            //         el = document.createElement('li'),
+            //         messages = document.getElementById('messages');
+
+            //     el.appendChild(text);
+            //     messages.appendChild(el);
+            // }
+
+            // socket.on('join', function(data) {
+            //     console.log('join html')
+            //     socket.broadcast.emit("userjoinedthechat : has joined the chat ");
+
+            // addMessage(data);
+        // });
+    </script>
+</head>
+<body>
+    <p>See the console for socket.io </p>
+    
+</body>
+</html>
