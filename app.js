@@ -87,7 +87,7 @@ openRoutes.post('/teacher_login', checkParamsPOST(['phone', 'password']), teache
 openRoutes.post('/add_course', checkParamsPOST(['name']), courseController.addCourse);
 openRoutes.post('/update_course', checkParamsPOST(['course_id']), courseController.updateCourse);
 openRoutes.post('/delete_course', checkParamsPOST(['course_id']), courseController.deleteCourse);
-openRoutes.post('/get_courses', courseController.getCourses);
+openRoutes.get('/get_courses', courseController.getCourses);
 
 // Attendance
 openRoutes.post('/add_attendance', checkParamsPOST(['student_id', 'course_id', 'token', 'manual']), attendanceController.addAttendance);
@@ -112,46 +112,3 @@ openRoutes.post('/student_login', checkParamsPOST(['phone', 'password']), studen
 // socket_file(io)
 
 //socket.io
-    let sockets = []
-    io.on('connection', (socket) => {
-        console.log(socket.id)
-        sockets.push(socket.id)
-        // socket.emit('qr_code', 'rand')
-        
-
-        openRoutes.get('/qr', (req, res) => {
-            console.log(req.query.token)
-            console.log('api call')
-
-            let rand = 'http://'+randomKey(5)
-            console.log('sockets', sockets)
-            sockets.forEach(element => {
-                io.to(element).emit('qr_code', rand)
-                
-            });
-            //     // socket.emit('qr_code', rand)
-            //     io.to(socket_id).emit('qr_code', rand)
-            // }
-            // socket.on('qr_code', (data) => {
-            //     console.log('returns qr:', data)
-            // })
-            // console.log('socket: ', socket)
-            console.log('socket done')
-
-            socket.on('join', function(userNickname) {
-
-                console.log(userNickname +" : has joined the chat "  );
-        
-                socket.broadcast.emit('userjoinedthechat',userNickname +" : has joined the chat ");
-            })
-
-            res.send('done');
-
-        // socket.on('disconnect', function() {
-        //     console.log(' has left ')
-        //     socket.broadcast.emit( "userdisconnect" ,' user has left')
-        // })
-
-    });
-    
-})

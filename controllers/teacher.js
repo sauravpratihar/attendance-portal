@@ -9,26 +9,29 @@ function addTeacher(req, res){
     try{
         let params = req.body
         let timestamp = new Date()/1000;
+        bcrypt.hash(params.password || "", saltRounds, function(err, hash) {
+            const newTeacher = new Teacher({
+                roll_number: params.roll_number || "",
+                field: params.field || "",
+                year: params.year || "",
+                name: params.name || "",
+                phone: params.phone || "",
+                email: params.email || "",
+                password: hash,
+                added_timestamp: timestamp,
+                updated_timestamp: timestamp
+            })
 
-        const newTeacher = new Teacher({
-            roll_number: params.roll_number || "",
-            field: params.field || "",
-            year: params.year || "",
-            name: params.name || "",
-            phone: params.phone || "",
-            email: params.email || "",
-            password: params.password || "",
-            added_timestamp: timestamp,
-            updated_timestamp: timestamp
-        })
-
-        newTeacher.save()
-        .then((data) => {
-            console.log(data)
-            res.send(FUNCTIONS.RESPONSE(100, data))
-        }).catch(err => {
-            res.send(FUNCTIONS.RESPONSE(500, err.message))
-        })
+            newTeacher.save()
+            .then((data) => {
+                console.log(data)
+                res.send(FUNCTIONS.RESPONSE(100, data))
+            }).catch(err => {
+                res.send(FUNCTIONS.RESPONSE(500, err.message))
+            })
+            if(err)
+                res.send(FUNCTIONS.RESPONSE(500, err.message))
+        });
     }
     catch(err){
         res.send(FUNCTIONS.RESPONSE(500, err.message))
@@ -111,7 +114,7 @@ function teacher_login(req, res){
                 })
             }
             else{
-                res.send(FUNCTIONS.RESPONSE(205, 'wrong email'))
+                res.send(FUNCTIONS.RESPONSE(201, 'teacher not found'))
 
             }
         }).catch(err => {

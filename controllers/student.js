@@ -10,28 +10,31 @@ function addStudent(req, res){
     try{
         let params = req.body
         let timestamp = new Date()/1000;
+        bcrypt.hash(params.password || "", saltRounds, function(err, hash) {
+            const newStudent = new Student({
+                name: params.name || "",
+                roll_number: params.roll_number || "",
+                field: params.field || "",
+                year: params.year || "",
+                email: params.email || "",
+                phone: params.phone || "",
+                password: hash,
+                imei: params.imei || "",
+                device_details: JSON.parse(params.device_details || "{}"),
+                added_timestamp: timestamp,
+                updated_timestamp: timestamp
+            })
 
-        const newStudent = new Student({
-            name: params.name || "",
-            roll_number: params.roll_number || "",
-            field: params.field || "",
-            year: params.year || "",
-            email: params.email || "",
-            phone: params.phone || "",
-            imei: params.imei || "",
-            device_details: JSON.parse(params.device_details || "{}"),
-            added_timestamp: timestamp,
-            updated_timestamp: timestamp
-        })
-
-        newStudent.save()
-        .then((data) => {
-            console.log(data)
-            res.send(FUNCTIONS.RESPONSE(100, data))
-        }).catch(err => {
-            res.send(FUNCTIONS.RESPONSE(500, err.message))
+            newStudent.save()
+            .then((data) => {
+                console.log(data)
+                res.send(FUNCTIONS.RESPONSE(100, data))
+            }).catch(err => {
+                res.send(FUNCTIONS.RESPONSE(500, err.message))
+            })
         })
     }
+
     catch(err){
         res.send(FUNCTIONS.RESPONSE(500, err.message))
     }
